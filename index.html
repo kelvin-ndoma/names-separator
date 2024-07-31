@@ -8,21 +8,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>Name Separator made Easy for Aralyn</h1>
+        <h1>Name Separator</h1>
         <textarea id="nameInput" placeholder="Enter names, one per line..."></textarea>
         <div class="button-container">
             <button onclick="separateNames()">Separate Names</button>
             <button id="copyButton" onclick="copyToClipboard()">Copy</button>
         </div>
-        <table id="resultTable">
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                </tr>
-            </thead>
-            <tbody id="result"></tbody>
-        </table>
+        <div class="table-container">
+            <table id="resultTable">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                    </tr>
+                </thead>
+                <tbody id="result"></tbody>
+            </table>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
