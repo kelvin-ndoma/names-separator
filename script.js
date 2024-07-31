@@ -1,25 +1,47 @@
 function separateNames() {
-    const nameInput = document.getElementById('nameInput').value;
-    const names = nameInput.split('\n').map(name => name.trim()).filter(name => name.length > 0);
-    let resultHtml = '<table><tr><th>First Name</th><th>Last Name</th></tr>';
+    const input = document.getElementById('nameInput').value;
+    const names = input.split('\n').filter(name => name.trim() !== '');
+    const resultTableBody = document.getElementById('result');
+    resultTableBody.innerHTML = ''; // Clear any previous results
 
     names.forEach(name => {
-        const [firstName, ...rest] = name.split(' ');
-        const lastName = rest.join(' ');
-        resultHtml += `<tr><td>${firstName}</td><td>${lastName}</td></tr>`;
+        let parts = name.trim().toLowerCase().split(' ');
+        if (parts.length > 1) {
+            parts[0] = capitalizeFirstLetter(parts[0]);
+            parts[parts.length - 1] = capitalizeFirstLetter(parts[parts.length - 1]);
+        } else {
+            parts[0] = capitalizeFirstLetter(parts[0]);
+        }
+        
+        const row = document.createElement('tr');
+        const firstNameCell = document.createElement('td');
+        const lastNameCell = document.createElement('td');
+        
+        firstNameCell.textContent = parts[0];
+        lastNameCell.textContent = parts[parts.length - 1];
+        
+        row.appendChild(firstNameCell);
+        row.appendChild(lastNameCell);
+        resultTableBody.appendChild(row);
     });
+}
 
-    resultHtml += '</table>';
-    document.getElementById('result').innerHTML = resultHtml;
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function copyToClipboard() {
-    const result = document.getElementById('result').innerHTML;
-    const el = document.createElement('textarea');
-    el.value = result.replace(/<\/?[^>]+(>|$)/g, ""); // Strip HTML tags
-    document.body.appendChild(el);
-    el.select();
+    const resultTable = document.getElementById('resultTable');
+    const range = document.createRange();
+    range.selectNode(resultTable);
+    window.getSelection().removeAllRanges(); // Clear current selection
+    window.getSelection().addRange(range); // Select the table content
     document.execCommand('copy');
-    document.body.removeChild(el);
-    alert('Table copied to clipboard!');
+    window.getSelection().removeAllRanges(); // Clear selection after copying
+
+    const copyButton = document.getElementById('copyButton');
+    copyButton.textContent = 'Copied!';
+    setTimeout(() => {
+        copyButton.textContent = 'Copy';
+    }, 2000);
 }
